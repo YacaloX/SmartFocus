@@ -15,7 +15,7 @@ Inspirado en Spotlight, PowerToys Run y Alfred, pero centrado exclusivamente en 
 - ⚡ **Enfoque instantáneo** – restaura ventanas minimizadas, las trae al frente y les da foco real (evita el *focus stealing* de Windows).
 - 🧠 **Aprendizaje por frecuencia** – reordena los resultados según tus hábitos de uso.
 - 🏷️ **Alias personalizables** – define `navegador → Firefox`, `música → Spotify`.
-- ⌨️ **Hotkey global configurable** – por defecto `Ctrl+Space`.
+- ⌨️ **Hotkey global configurable** – por defecto `Windows+Y`.
 - 🎨 **UI minimalista con glow cian** – ventana flotante, fondo oscuro, tipografía monoespaciada.
 - 📦 **Bajo consumo de recursos** – ocupa menos de 50 MB de RAM en reposo.
 - 🔧 **Arquitectura modular** – lista para extensiones futuras (comandos, pestañas, Everything Search).

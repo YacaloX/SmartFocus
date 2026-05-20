@@ -8,9 +8,17 @@ namespace SmartFocus
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            AliasManager.Load();
-            HistoryTracker.Load();
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                Exception ex = (Exception)args.ExceptionObject;
+                MessageBox.Show($"Error fatal:\n{ex.Message}\n\nStack:\n{ex.StackTrace}", "Crash", MessageBoxButton.OK, MessageBoxImage.Error);
+            };
+            // También captura excepciones en el hilo de la UI
+            Application.Current.DispatcherUnhandledException += (sender, args) =>
+            {
+                args.Handled = true;
+                MessageBox.Show($"Error UI:\n{args.Exception.Message}\n\nStack:\n{args.Exception.StackTrace}", "Crash", MessageBoxButton.OK, MessageBoxImage.Error);
+            };
         }
     }
 }

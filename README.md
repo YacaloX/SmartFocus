@@ -40,7 +40,7 @@ Ve a [Releases](../../releases) y descarga el archivo `SmartFocus_Setup.exe` (in
 ### Desde el código fuente
 Requisitos:
 - [.NET 8 SDK](https://dotnet.microsoft.com/es-es/download/dotnet/8.0)
-- Windows 10 o superior
+- Windows 11
 - Visual Studio 2022 (opcional, puedes usar `dotnet build`)
 
 ```bash

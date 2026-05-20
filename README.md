@@ -2,7 +2,7 @@
 
 ![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=flat&logo=dotnet)
 ![Windows](https://img.shields.io/badge/Windows-10%2B-0078D6?style=flat&logo=windows)
-![Licencia](https://img.shields.io/badge/licencia-MIT-00FFFF?style=flat)
+![Licencia](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 **SmartFocus** es un lanzador ultraligero para Windows que te permite **buscar y traer al frente cualquier ventana abierta** en un instante.  
 Inspirado en Spotlight, PowerToys Run y Alfred, pero centrado exclusivamente en control de ventanas con una estética **cyberpunk elegante**.

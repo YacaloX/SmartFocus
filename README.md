@@ -35,7 +35,7 @@ Inspirado en Spotlight, PowerToys Run y Alfred, pero centrado exclusivamente en 
 ## Instalación
 
 ### Descarga directa
-Ve a [Releases](../../releases) y descarga el archivo `SmartFocus_Setup.exe` (instalador MSIX) o la versión portátil `SmartFocus.zip`.
+Ve a [Releases](https://github.com/YacaloX/SmartFocus/releases) y descarga el archivo `SmartFocus_Setup.exe` (instalador MSIX) o la versión portátil `SmartFocus.zip`.
 
 ### Desde el código fuente
 Requisitos:

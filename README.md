@@ -44,7 +44,7 @@ Requisitos:
 - Visual Studio 2022 (opcional, puedes usar `dotnet build`)
 
 ```bash
-git clone https://github.com/tuusuario/SmartFocus.git
+git clone https://github.com/YacaloX/SmartFocus.git
 cd SmartFocus
 dotnet build -c Release
 dotnet run --project src/SmartFocus.UI

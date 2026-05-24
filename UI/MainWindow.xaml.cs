@@ -11,7 +11,11 @@ namespace SmartFocus
         public MainWindow()
         {
             InitializeComponent();
-            this.Loaded += MainWindow_Loaded;
+            this.Loaded += (s, e) =>
+            {
+                // Al cargar, ocultar inmediatamente (solo se muestra con la hotkey)
+                Hide();
+            };
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -27,16 +31,6 @@ namespace SmartFocus
         private void OnHotkeyPressed()
         {
             ShowSearchBar();
-        }
-
-        public MainWindow()
-        {
-            InitializeComponent();
-            this.Loaded += (s, e) =>
-            {
-                // Al cargar, ocultar inmediatamente (solo se muestra con la hotkey)
-                Hide();
-            };
         }
 
         // Método público para mostrar la barra desde el ViewModel

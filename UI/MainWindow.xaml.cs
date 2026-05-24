@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Input;
+using SmartFocus.Core;
 
 namespace SmartFocus
 {
@@ -10,7 +11,7 @@ namespace SmartFocus
         public MainWindow()
         {
             InitializeComponent();
-            // No crees el HotkeyService aquí
+            // No crees el HotkeyService aquÃ­
             this.Loaded += MainWindow_Loaded;
         }
 
@@ -36,7 +37,7 @@ namespace SmartFocus
             };
         }
 
-        // Método público para mostrar la barra desde el ViewModel
+        // MÃ©todo pÃºblico para mostrar la barra desde el ViewModel
         public void ShowSearchBar()
         {
             Show();
@@ -52,12 +53,12 @@ namespace SmartFocus
                 Hide();
         }
 
-        // Para que al perder el foco se oculte automáticamente (opcional)
+        // Para que al perder el foco se oculte automÃ¡ticamente (opcional)
         protected override void OnDeactivated(EventArgs e)
         {
             base.OnDeactivated(e);
-            // Pequeño retardo para evitar que se oculte al hacer clic en la lista
-            // Puedes usar un DispatcherTimer o simplemente Hide() aquí si prefieres.
+            // PequeÃ±o retardo para evitar que se oculte al hacer clic en la lista
+            // Puedes usar un DispatcherTimer o simplemente Hide() aquÃ­ si prefieres.
             // Hide();
         }
     }

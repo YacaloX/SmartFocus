@@ -7,19 +7,21 @@ namespace SmartFocus
     public partial class MainWindow : Window
     {
         private HotkeyService? _hotkeyService;
-
+    
         public MainWindow()
         {
             InitializeComponent();
-            // No crees el HotkeyService aquí
             this.Loaded += MainWindow_Loaded;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            // Ahora la ventana tiene handle, podemos registrar la hotkey
+            // Now the window has a handle — safe to create hotkey and hide
             _hotkeyService = new HotkeyService(this);
             _hotkeyService.HotkeyPressed += OnHotkeyPressed;
+
+            // Hide immediately on load (shows only when hotkey pressed)
+            Hide();
         }
 
         private void OnHotkeyPressed()

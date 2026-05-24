@@ -48,5 +48,6 @@ Requisitos:
 ```bash
 git clone https://github.com/YacaloX/SmartFocus.git
 cd SmartFocus
-dotnet build -c Release
+dotnet build
 dotnet run --project src/SmartFocus.UI
+```

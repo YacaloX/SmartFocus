@@ -18,9 +18,13 @@ public class HotkeyService : IDisposable
 		_source = HwndSource.FromHwnd(handle)!;
 		_source.AddHook(WndProc);
 
-		// Registrar Win + Y
-		User32.RegisterHotKey(handle, _hotkeyId, User32.HotKeyModifiers.MOD_WIN, 0x59);
-	}
+        if (!User32.RegisterHotKey(handle, _hotkeyId, User32.HotKeyModifiers.MOD_CONTROL | User32.HotKeyModifiers.MOD_SHIFT, 0x7B))
+        {
+            // Lanza una excepción o al menos registra un error
+            throw new InvalidOperationException("No se pudo registrar la hotkey Win+Y.");
+        }
+
+    }
 
 	private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
 	{

@@ -44,6 +44,7 @@ Requisitos:
 - [.NET 8 SDK](https://dotnet.microsoft.com/es-es/download/dotnet/8.0)
 - Windows 11
 - Visual Studio 2022 (opcional, puedes usar `dotnet build`)
+- Librería ```Vanara.PInvoke.User32```
 
 ```bash
 git clone https://github.com/YacaloX/SmartFocus.git

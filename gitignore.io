@@ -32,7 +32,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-[Oo]bj
+[Oo]bj/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

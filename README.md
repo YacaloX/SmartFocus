@@ -17,7 +17,8 @@ Inspirado en Spotlight, PowerToys Run y Alfred, pero centrado exclusivamente en 
 - 🏷️ **Alias personalizables** – define `navegador → Firefox`, `música → Spotify`.
 - ⌨️ **Hotkey global configurable** – por defecto `Windows+Y`.
 - 🎨 **UI minimalista con glow cian** – ventana flotante, fondo oscuro, tipografía monoespaciada.
-- 📦 **Bajo consumo de recursos** – ocupa menos de 50 MB de RAM en reposo.
+- 📦 **Bajo consumo de recursos** – ocupa menos de 50 MB de RAM en reposo. (Exactamente 35-40MB)
+
 - 🔧 **Arquitectura modular** – lista para extensiones futuras (comandos, pestañas, Everything Search).
 
 ---

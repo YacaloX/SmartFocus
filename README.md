@@ -183,6 +183,8 @@ public class SearchResult
 - [ ] Temas personalizables
 - [ ] Plugin system
 - [ ] Tests unitarios
+- [ ] Modificación de la interfaz
+- [ ] Modificación de la Hotkey
 
 ---
 

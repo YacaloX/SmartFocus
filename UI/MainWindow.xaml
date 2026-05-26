@@ -13,7 +13,9 @@
         ShowInTaskbar="False"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        d:DesignHeight="350" d:DesignWidth="600">
+        d:DesignHeight="350" d:DesignWidth="600"
+        Loaded="MainWindow_Loaded"
+        KeyDown="Window_KeyDown">
 
 	<Window.Resources>
 		<!-- Colores y efectos -->

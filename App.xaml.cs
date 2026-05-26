@@ -19,6 +19,9 @@ namespace SmartFocus
                 args.Handled = true;
                 MessageBox.Show($"Error UI:\n{args.Exception.Message}\n\nStack:\n{args.Exception.StackTrace}", "Crash", MessageBoxButton.OK, MessageBoxImage.Error);
             };
+            AliasManager.Load();
+            HistoryTracker.Load();
+
         }
     }
 }

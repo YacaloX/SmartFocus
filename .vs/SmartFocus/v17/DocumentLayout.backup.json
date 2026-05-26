@@ -3,24 +3,16 @@
   "WorkspaceRootPath": "F:\\Escritorio\\SmartFocus\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Escritorio\\SmartFocus\\Core\\WindowManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Core\\WindowManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{74AC7C76-BB42-BE6E-DD90-CD8EA3F70D28}|SmartFocus.csproj|f:\\escritorio\\smartfocus\\core\\hotkeyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{74AC7C76-BB42-BE6E-DD90-CD8EA3F70D28}|SmartFocus.csproj|solutionrelative:core\\hotkeyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Escritorio\\SmartFocus\\UI\\MainWindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:UI\\MainWindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{74AC7C76-BB42-BE6E-DD90-CD8EA3F70D28}|SmartFocus.csproj|f:\\escritorio\\smartfocus\\ui\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{74AC7C76-BB42-BE6E-DD90-CD8EA3F70D28}|SmartFocus.csproj|solutionrelative:ui\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Escritorio\\SmartFocus\\App.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:App.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Escritorio\\SmartFocus\\SmartFocus.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SmartFocus.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Escritorio\\SmartFocus\\Core\\Models\\MainViewModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Core\\Models\\MainViewModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{74AC7C76-BB42-BE6E-DD90-CD8EA3F70D28}|SmartFocus.csproj|f:\\escritorio\\smartfocus\\core\\windowmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{74AC7C76-BB42-BE6E-DD90-CD8EA3F70D28}|SmartFocus.csproj|solutionrelative:core\\windowmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,45 +22,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "SmartFocus.csproj",
-              "DocumentMoniker": "F:\\Escritorio\\SmartFocus\\SmartFocus.csproj",
-              "RelativeDocumentMoniker": "SmartFocus.csproj",
-              "ToolTip": "F:\\Escritorio\\SmartFocus\\SmartFocus.csproj",
-              "RelativeToolTip": "SmartFocus.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-05-25T23:51:02.148Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "App.xaml.cs",
-              "DocumentMoniker": "F:\\Escritorio\\SmartFocus\\App.xaml.cs",
-              "RelativeDocumentMoniker": "App.xaml.cs",
-              "ToolTip": "F:\\Escritorio\\SmartFocus\\App.xaml.cs",
-              "RelativeToolTip": "App.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-25T22:55:39.705Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "WindowManager.cs",
-              "DocumentMoniker": "F:\\Escritorio\\SmartFocus\\Core\\WindowManager.cs",
-              "RelativeDocumentMoniker": "Core\\WindowManager.cs",
-              "ToolTip": "F:\\Escritorio\\SmartFocus\\Core\\WindowManager.cs",
-              "RelativeToolTip": "Core\\WindowManager.cs",
-              "ViewState": "AgIAAGYAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
+              "Title": "HotkeyService.cs",
+              "DocumentMoniker": "F:\\Escritorio\\SmartFocus\\Core\\HotkeyService.cs",
+              "RelativeDocumentMoniker": "Core\\HotkeyService.cs",
+              "ToolTip": "F:\\Escritorio\\SmartFocus\\Core\\HotkeyService.cs",
+              "RelativeToolTip": "Core\\HotkeyService.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAQwBQAAABcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-25T22:54:30.851Z",
+              "WhenOpened": "2026-05-26T23:01:43.261Z",
               "EditorCaption": ""
             },
             {
@@ -79,22 +45,23 @@
               "RelativeDocumentMoniker": "UI\\MainWindow.xaml.cs",
               "ToolTip": "F:\\Escritorio\\SmartFocus\\UI\\MainWindow.xaml.cs",
               "RelativeToolTip": "UI\\MainWindow.xaml.cs",
-              "ViewState": "AgIAADwAAAAAAAAAAAAYwE4AAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAcwEwAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-25T22:53:40.102Z",
+              "WhenOpened": "2026-05-26T23:01:22.063Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "MainViewModel.cs",
-              "DocumentMoniker": "F:\\Escritorio\\SmartFocus\\Core\\Models\\MainViewModel.cs",
-              "RelativeDocumentMoniker": "Core\\Models\\MainViewModel.cs",
-              "ToolTip": "F:\\Escritorio\\SmartFocus\\Core\\Models\\MainViewModel.cs",
-              "RelativeToolTip": "Core\\Models\\MainViewModel.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAYwD0AAAAJAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "WindowManager.cs",
+              "DocumentMoniker": "F:\\Escritorio\\SmartFocus\\Core\\WindowManager.cs",
+              "RelativeDocumentMoniker": "Core\\WindowManager.cs",
+              "ToolTip": "F:\\Escritorio\\SmartFocus\\Core\\WindowManager.cs",
+              "RelativeToolTip": "Core\\WindowManager.cs",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAmwGMAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-25T22:53:17.351Z"
+              "WhenOpened": "2026-05-26T23:00:17.345Z",
+              "EditorCaption": ""
             }
           ]
         }

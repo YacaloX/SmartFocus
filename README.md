@@ -118,6 +118,8 @@ La configuración del hotkey está en `HotkeyService.cs`. Edita la constante:
 private const Keys HOTKEY = Keys.Y;  // Ctrl+Y
 ```
 
+- Por el momento **no hay manera de modificar la hotkey en la versión precompilada,** puedes intentar con Cheat Engine o compilando el código tu mismo
+
 ---
 
 ## 📊 Uso
@@ -238,5 +240,3 @@ Este proyecto está bajo la licencia **MIT** – Ver [LICENSE](LICENSE) para det
 
 **Hecho con ❤️ en C# + WPF**
 ```
-
----

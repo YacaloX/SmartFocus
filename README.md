@@ -146,7 +146,7 @@ SmartFocus registra cada ventana que enfocas:
 - **Frecuencia**: ¿Cuántas veces has abierto Discord?
 - **Última vez**: ¿Cuándo lo abriste por última vez?
 
-Los resultados se reordenan automáticamente basado en tus hábitos. Si siempre abres Chrome antes de Firefox, Chrome aparecerá primero en "bro".
+Los resultados se reordenan automáticamente basado en tus hábitos. Si siempre abres Chrome antes de Firefox, Chrome aparecerá primero en "brow".
 
 **Archivo**: `%AppData%/SmartFocus/history.json`
 
@@ -183,8 +183,8 @@ public class SearchResult
 - [ ] Temas personalizables
 - [ ] Plugin system
 - [ ] Tests unitarios
-- [ ] Modificación de la interfaz
-- [ ] Modificación de la Hotkey
+- [ ] Hotkey Modificable
+- [ ] Menú de Ajustes
 
 ---
 

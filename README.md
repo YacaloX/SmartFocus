@@ -1,7 +1,7 @@
 
 # SmartFocus
 
-[![.NET](https://img.shields.io/badge/.NET-8.0%2B-512BD4?style=flat&logo=dotnet)](https://dotnet.microsoft.com/)
+[![.NET](https://img.shields.io/badge/.NET-10.0%2B-512BD4?style=flat&logo=dotnet)](https://dotnet.microsoft.com/)
 [![Windows](https://img.shields.io/badge/Windows-11-0078D6?style=flat&logo=windows)](https://www.microsoft.com/windows/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-In%20Development-orange)]()
@@ -39,7 +39,7 @@
 ### Desde Código Fuente
 
 **Requisitos:**
-- [.NET 8 SDK](https://dotnet.microsoft.com/es-es/download/dotnet/8.0)
+- [.NET 10 SDK](https://dotnet.microsoft.com/es-es/download/dotnet/10.0)
 - Windows 11
 - Visual Studio 2022 (opcional)
 

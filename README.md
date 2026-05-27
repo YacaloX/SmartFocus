@@ -241,4 +241,3 @@ Este proyecto está bajo la licencia **MIT** – Ver [LICENSE](LICENSE) para det
 ---
 
 **Hecho con ❤️ en C# + WPF**
-```

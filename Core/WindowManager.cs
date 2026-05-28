@@ -52,6 +52,16 @@ namespace SmartFocus.Core
         [DllImport("user32.dll")]
         private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        static string GetWindowTextRaw(IntPtr hWnd)
+        {
+            StringBuilder sb = new StringBuilder(256);
+            GetWindowText(hWnd, sb, sb.Capacity);
+            return sb.ToString();
+        }
+
         private const uint MOUSEEVENTF_LEFTDOWN = 0x0002;
         private const uint MOUSEEVENTF_LEFTUP = 0x0004;
         private const byte VK_MENU = 0x12;
@@ -67,68 +77,43 @@ namespace SmartFocus.Core
 
         public void FocusWindow(IntPtr hwnd)
         {
-            try
-            {
-                if (!User32.IsWindow((HWND)hwnd))
-                    return;
+            hwnd = User32.GetAncestor(
+                (HWND)hwnd,
+                User32.GetAncestorFlag.GA_ROOT)
+                .DangerousGetHandle();
 
-                if (User32.IsIconic((HWND)hwnd))
-                    ShowWindow(hwnd, SW_RESTORE);
-                else
-                    ShowWindow(hwnd, SW_SHOW);
+            var target = (HWND)hwnd;
 
-                Thread.Sleep(50);
+            Console.WriteLine($"HWND TARGET = {hwnd}");
+            Console.WriteLine($"TITLE = {GetWindowTextRaw(hwnd)}");
 
-                GetWindowThreadProcessId(hwnd, out uint destPid);
-                AllowSetForegroundWindow(destPid);
+            User32.ShowWindow(target, ShowWindowCommand.SW_RESTORE);
 
-                IntPtr foreground = GetForegroundWindow();
-                uint foreThread = GetWindowThreadProcessId(foreground, out _);
-                uint targetThread = GetWindowThreadProcessId(hwnd, out _);
-                bool attached = false;
-                if (foreThread != targetThread)
-                {
-                    AttachThreadInput(foreThread, targetThread, true);
-                    attached = true;
-                }
+            var foreground = User32.GetForegroundWindow();
 
-                SetForegroundWindow(hwnd);
-                BringWindowToTop(hwnd);
-                SwitchToThisWindow(hwnd, true);
+            uint foreThread =
+                User32.GetWindowThreadProcessId(foreground, out _);
 
-                if (attached)
-                    AttachThreadInput(foreThread, targetThread, false);
+            uint appThread =
+                Kernel32.GetCurrentThreadId();
 
-                Thread.Sleep(100);
-                if (GetForegroundWindow() != hwnd)
-                {
-                    keybd_event(VK_MENU, 0, KEYEVENTF_EXTENDEDKEY, UIntPtr.Zero);
-                    keybd_event(VK_TAB, 0, KEYEVENTF_EXTENDEDKEY, UIntPtr.Zero);
-                    Thread.Sleep(30);
-                    keybd_event(VK_TAB, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, UIntPtr.Zero);
-                    keybd_event(VK_MENU, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, UIntPtr.Zero);
-                    Thread.Sleep(100);
-                    SetForegroundWindow(hwnd);
-                }
+            User32.AttachThreadInput(
+                appThread,
+                foreThread,
+                true);
 
-                if (GetForegroundWindow() != hwnd)
-                {
-                    if (GetWindowRect(hwnd, out RECT rect))
-                    {
-                        int x = (rect.Left + rect.Right) / 2;
-                        int y = rect.Top + 15;
-                        SetCursorPos(x, y);
-                        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, UIntPtr.Zero);
-                        Thread.Sleep(10);
-                        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, UIntPtr.Zero);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // El error se ignora silenciosamente en producción
-                Debug.WriteLine($"Error en FocusWindow: {ex.Message}");
-            }
+            User32.BringWindowToTop(target);
+
+            User32.SetForegroundWindow(target);
+
+            User32.SetFocus(target);
+
+            User32.SetActiveWindow(target);
+
+            User32.AttachThreadInput(
+                appThread,
+                foreThread,
+                false);
         }
 
         public List<WindowInfo> GetAllWindows()

@@ -1,55 +1,51 @@
-using SmartFocus.Core;
+﻿using SmartFocus.Core;
 using SmartFocus.Models;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace SmartFocus
 {
     public partial class MainWindow : Window
     {
-        private HotkeyService? _hotkeyService;
         private WindowManager _windowManager = new();
         private MainViewModel _viewModel = new();
+        public event Action? WindowReady;
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            WindowReady?.Invoke();
+        }
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = _viewModel;
-            this.PreviewKeyDown += Window_KeyDown;
+            Visibility = Visibility.Hidden;  // ← en lugar de Hide()
+            Loaded += (_, _) => RefreshWindowList();
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            AliasManager.Load();
-            HistoryTracker.Load();
-
-            _hotkeyService = new HotkeyService(this);
-            _hotkeyService.HotkeyPressed += OnHotkeyPressed;
-
-            Hide();
-            RefreshWindowList();
-        }
-
-        private void RefreshWindowList()
+        public void RefreshWindowList()
         {
             var windows = _windowManager.GetAllWindows();
             Dispatcher.Invoke(() => _viewModel.UpdateWindows(windows));
         }
 
-        private void OnHotkeyPressed()
+        public void FocusSearchBox()
         {
-            ShowSearchBar();
+            SearchBox.Focus();
+            SearchBox.SelectAll();
         }
 
+        // Método público que puede llamar el icono de bandeja
         public void ShowSearchBar()
         {
             RefreshWindowList();
             Show();
             Activate();
-            SearchBox.Focus();
-            SearchBox.SelectAll();
+            FocusSearchBox();
         }
 
         private async void Window_KeyDown(object sender, KeyEventArgs e)
@@ -65,17 +61,22 @@ namespace SmartFocus
                 var processName = selected.ProcessName;
 
                 _windowManager.FocusWindow(handle);
+
                 HistoryTracker.RegisterUse(processName);
 
                 await Task.Delay(200);
-                Hide();
+
+                Dispatcher.BeginInvoke(() =>
+                {
+                    Hide();
+                });
             }
         }
 
-        protected override void OnDeactivated(EventArgs e)
-        {
-            base.OnDeactivated(e);
-            // Hide();  // si quieres que se oculte al perder foco, descomenta
-        }
+        // protected override void OnDeactivated(EventArgs e)
+        // {
+        //     base.OnDeactivated(e);
+        //     Hide();
+        // }
     }
 }

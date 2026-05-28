@@ -48,30 +48,35 @@ namespace SmartFocus
             FocusSearchBox();
         }
 
-        private async void Window_KeyDown(object sender, KeyEventArgs e)
+        private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-                Hide();
-            else if (e.Key == Key.Enter)
             {
-                var selected = _viewModel.SelectedResult;
-                if (selected == null) return;
-
-                var handle = selected.Handle;
-                var processName = selected.ProcessName;
-
-                _windowManager.FocusWindow(handle);
-
-                HistoryTracker.RegisterUse(processName);
-
-                await Task.Delay(200);
-
-                Dispatcher.BeginInvoke(() =>
-                {
-                    Hide();
-                });
+                Hide();
+                return;
             }
+
+            if (e.Key == Key.Enter)
+            {
+            var selected = _viewModel.SelectedResult;
+            if (selected == null) return;
+
+            var handle = selected.Handle;
+            var processName = selected.ProcessName;
+
+        // 1. Ocultar inmediatamente
+            Hide();
+
+        // 2. Registrar uso (en background)
+            HistoryTracker.RegisterUse(processName);
+
+        // 3. Forzar foco después de que la UI haya procesado el Hide
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                _windowManager.FocusWindow(handle);
+            }), System.Windows.Threading.DispatcherPriority.Background);
         }
+    }
 
         // protected override void OnDeactivated(EventArgs e)
         // {

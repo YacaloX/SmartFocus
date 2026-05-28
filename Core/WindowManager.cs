@@ -74,47 +74,44 @@ namespace SmartFocus.Core
         {
             public int Left, Top, Right, Bottom;
         }
+    
+    public void FocusWindow(IntPtr hwnd)
+    {
+    // Asegurar que trabajamos con la ventana raíz
+        hwnd = User32.GetAncestor((HWND)hwnd, User32.GetAncestorFlag.GA_ROOT).DangerousGetHandle();
+        var target = (HWND)hwnd;
 
-        public void FocusWindow(IntPtr hwnd)
+    // Validar que la ventana aún existe
+        if (!User32.IsWindow(target))
+            return;
+
+    // Restaurar si está minimizada
+        User32.ShowWindow(target, ShowWindowCommand.SW_RESTORE);
+
+    // Si nuestra app ya no está en primer plano (porque nos ocultamos),
+    // aplicamos la técnica de robo de foco.
+        var foreground = User32.GetForegroundWindow();
+        if (foreground != target)  // Si el destino no es ya el foco
         {
-            hwnd = User32.GetAncestor(
-                (HWND)hwnd,
-                User32.GetAncestorFlag.GA_ROOT)
-                .DangerousGetHandle();
+            uint foreThread = User32.GetWindowThreadProcessId(foreground, out _);
+            uint currentThread = Kernel32.GetCurrentThreadId();
 
-            var target = (HWND)hwnd;
-
-            Console.WriteLine($"HWND TARGET = {hwnd}");
-            Console.WriteLine($"TITLE = {GetWindowTextRaw(hwnd)}");
-
-            User32.ShowWindow(target, ShowWindowCommand.SW_RESTORE);
-
-            var foreground = User32.GetForegroundWindow();
-
-            uint foreThread =
-                User32.GetWindowThreadProcessId(foreground, out _);
-
-            uint appThread =
-                Kernel32.GetCurrentThreadId();
-
-            User32.AttachThreadInput(
-                appThread,
-                foreThread,
-                true);
-
-            User32.BringWindowToTop(target);
-
-            User32.SetForegroundWindow(target);
-
-            User32.SetFocus(target);
-
-            User32.SetActiveWindow(target);
-
-            User32.AttachThreadInput(
-                appThread,
-                foreThread,
-                false);
+            if (foreThread != currentThread)
+            {
+                User32.AttachThreadInput(currentThread, foreThread, true);
+                User32.SetForegroundWindow(target);
+                User32.AttachThreadInput(currentThread, foreThread, false);
+            }
+            else
+            {
+            // Ya somos el primer plano, llamada directa
+                User32.SetForegroundWindow(target);
+            }
         }
+
+    // Asegurar el foco del teclado en la ventana
+        User32.SetFocus(target);
+    }
 
         public List<WindowInfo> GetAllWindows()
         {

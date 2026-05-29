@@ -4,7 +4,7 @@
 [![.NET](https://img.shields.io/badge/.NET-10.0%2B-512BD4?style=flat&logo=dotnet)](https://dotnet.microsoft.com/)
 [![Windows](https://img.shields.io/badge/Windows-11-0078D6?style=flat&logo=windows)](https://www.microsoft.com/windows/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-In%20Development-orange)]()
+[![Status](https://img.shields.io/badge/Status-Stable%20build-green)](https://github.com/YacaloX/SmartFocus/releases)
 
 > Un lanzador ultraligero para Windows que te permite **buscar y enfocarse en cualquier ventana abierta al instante**.  
 > Inspirado en Spotlight, PowerToys Run y Alfred, pero especializado exclusivamente en **control inteligente de ventanas** con una estética **cyberpunk elegante**.
@@ -52,8 +52,7 @@ dotnet run
 ```
 
 ### Descarga Directa
-
-> ⚠️ **Los releases estables estarán disponibles próximamente**. De momento, compila desde el código fuente.
+Entra a la [Sección de Releases](https://github.com/YacaloX/SmartFocus/releases) en el repositorio para descargar, ya sea la versión Portable o el Instalador
 
 ---
 

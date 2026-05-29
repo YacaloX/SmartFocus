@@ -1,65 +1,138 @@
 ﻿using System.IO;
 using System.Text.Json;
+using SmartFocus.Core.Interfaces;
 using Vanara.PInvoke;
 
 namespace SmartFocus.Core
 {
-    public static class SettingsManager
+    public class SettingsManager : ISettingsManager
     {
-        private static readonly string FilePath = Path.Combine(AppPaths.AppFolder, "settings.json");
-        private static Settings? _settings;  // ✅ Ahora es nullable
+        private readonly string _filePath = Path.Combine(AppPaths.AppFolder, "settings.json");
+        private Settings? _settings;
+        private readonly JsonSerializerOptions _jsonOptions = new() { WriteIndented = true };
+        private readonly ReaderWriterLockSlim _lock = new();
 
-        static SettingsManager()
-        {
-            Load();
-        }
+        private readonly System.Timers.Timer _saveTimer = new(2000) { AutoReset = false };
+        private bool _dirty;
 
-        public static void Load()
+        public SettingsManager()
         {
-            if (!File.Exists(FilePath))
+            _saveTimer.Elapsed += (_, _) => FlushSave();
+            try { Load(); }
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"SettingsManager.Load failed: {ex.Message}");
                 _settings = new Settings();
-                Save();
-                return;
             }
-            var json = File.ReadAllText(FilePath);
-            // ✅ Si la deserialización devuelve null, se asigna un nuevo Settings()
-            _settings = JsonSerializer.Deserialize<Settings>(json) ?? new Settings();
         }
 
-        public static void Save()
-        {
-            if (_settings == null)
-                Load(); // Seguridad: si por algún motivo es null, recargar
+        private Settings Current => _settings ?? throw new InvalidOperationException("Settings failed to load");
 
-            var json = JsonSerializer.Serialize(_settings, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(FilePath, json);
+        public void Load()
+        {
+            _lock.EnterWriteLock();
+            try
+            {
+                if (!File.Exists(_filePath))
+                {
+                    _settings = new Settings();
+                    Save();
+                    return;
+                }
+                var json = File.ReadAllText(_filePath);
+                _settings = JsonSerializer.Deserialize<Settings>(json) ?? new Settings();
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
         }
 
-        public static string GetAccentColor()
+        private void FlushSave()
         {
-            if (_settings == null) Load();
-            return _settings!.AccentColor;
+            _lock.EnterReadLock();
+            try
+            {
+                if (!_dirty || _settings == null) return;
+                string dir = Path.GetDirectoryName(_filePath)!;
+                Directory.CreateDirectory(dir);
+                string temp = Path.GetTempFileName();
+                var json = JsonSerializer.Serialize(_settings, _jsonOptions);
+                File.WriteAllText(temp, json);
+                File.Move(temp, _filePath, overwrite: true);
+                _dirty = false;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"SettingsManager.FlushSave failed: {ex.Message}");
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
-        public static void SetAccentColor(string color)
+        public void Save()
         {
-            if (_settings == null) Load();
-            _settings!.AccentColor = color;
+            _lock.EnterReadLock();
+            _dirty = true;
+            _lock.ExitReadLock();
+            _saveTimer.Stop();
+            _saveTimer.Start();
+        }
+
+        public string GetAccentColor()
+        {
+            _lock.EnterReadLock();
+            try
+            {
+                return Current.AccentColor;
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+        public void SetAccentColor(string color)
+        {
+            _lock.EnterWriteLock();
+            try
+            {
+                Current.AccentColor = color;
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
             Save();
         }
 
-        public static (User32.HotKeyModifiers modifiers, string key) GetHotkey()
+        public (User32.HotKeyModifiers modifiers, string key) GetHotkey()
         {
-            if (_settings == null) Load();
-            return (_settings!.HotkeyModifiers, _settings!.HotkeyKey);
+            _lock.EnterReadLock();
+            try
+            {
+                return (Current.HotkeyModifiers, Current.HotkeyKey);
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
-        public static void SetHotkey(User32.HotKeyModifiers modifiers, string key)
+        public void SetHotkey(User32.HotKeyModifiers modifiers, string key)
         {
-            if (_settings == null) Load();
-            _settings!.HotkeyModifiers = modifiers;
-            _settings!.HotkeyKey = key;
+            _lock.EnterWriteLock();
+            try
+            {
+                Current.HotkeyModifiers = modifiers;
+                Current.HotkeyKey = key;
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
             Save();
         }
     }

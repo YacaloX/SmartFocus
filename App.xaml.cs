@@ -1,12 +1,13 @@
 ﻿using SmartFocus.Core;
 using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using Vanara.PInvoke;
+using Application = System.Windows.Application;
+using MessageBox = System.Windows.MessageBox;
 
 namespace SmartFocus
 {
@@ -18,7 +19,9 @@ namespace SmartFocus
         // Referencia permanente al icono de la bandeja
         private Hardcodet.Wpf.TaskbarNotification.TaskbarIcon? _trayIcon;
 
-        // Win32 imports
+        private const int SW_RESTORE = 9;
+        private const int SW_SHOW = 5;
+
         [DllImport("user32.dll")]
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
@@ -26,41 +29,11 @@ namespace SmartFocus
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
-        private static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
-
-        [DllImport("user32.dll")]
         private static extern bool AllowSetForegroundWindow(uint dwProcessId);
-
-        [DllImport("user32.dll")]
-        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
-
-        private const int SW_RESTORE = 9;
-        private const int SW_SHOW = 5;
-
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-
-        static string GetWindowTextRaw(IntPtr hWnd)
-        {
-            StringBuilder sb = new StringBuilder(256);
-            GetWindowText(hWnd, sb, sb.Capacity);
-            return sb.ToString();
-        }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            // Cargar configuraciones
-            AliasManager.Load();
-            HistoryTracker.Load();
-            SettingsManager.Load();
 
             // Crear ventana principal (oculta al inicio)
             _mainWindow = new MainWindow();
@@ -73,7 +46,7 @@ namespace SmartFocus
             // Registrar hotkey DESPUÉS de que la ventana tenga handle (evento Loaded)
             _mainWindow.WindowReady += () =>
             {
-                var (modifiers, key) = SettingsManager.GetHotkey();
+                var (modifiers, key) = AppServices.Settings.GetHotkey();
                 bool success = _hotkeyService.RegisterHotkey(modifiers, key);
 
                 if (!success)
@@ -82,7 +55,7 @@ namespace SmartFocus
                     success = _hotkeyService.RegisterHotkey(User32.HotKeyModifiers.MOD_WIN, "Y");
                     if (success)
                     {
-                        SettingsManager.SetHotkey(User32.HotKeyModifiers.MOD_WIN, "Y");
+                        AppServices.Settings.SetHotkey(User32.HotKeyModifiers.MOD_WIN, "Y");
                     }
                     else
                     {
@@ -92,7 +65,7 @@ namespace SmartFocus
                             "F");
                         if (success)
                         {
-                            SettingsManager.SetHotkey(User32.HotKeyModifiers.MOD_CONTROL | User32.HotKeyModifiers.MOD_ALT, "F");
+                            AppServices.Settings.SetHotkey(User32.HotKeyModifiers.MOD_CONTROL | User32.HotKeyModifiers.MOD_ALT, "F");
                         }
                         else
                         {
@@ -124,11 +97,7 @@ namespace SmartFocus
 
         private void OnHotkeyPressed()
         {
-            if (_mainWindow == null) return;
-            _mainWindow.Dispatcher.Invoke(() =>
-            {
-                _mainWindow.ShowSearchBar();
-            });
+            _mainWindow?.ShowSearchBar();
         }
 
         /// <summary>
@@ -162,21 +131,37 @@ namespace SmartFocus
             return await Task.Run(() => _hotkeyService.RegisterHotkey(modifiers, key));
         }
 
+        protected override void OnExit(ExitEventArgs e)
+        {
+            if (_hotkeyService != null)
+            {
+                _hotkeyService.HotkeyPressed -= OnHotkeyPressed;
+                _hotkeyService.Dispose();
+            }
+            _trayIcon?.Dispose();
+            base.OnExit(e);
+        }
+
         private void CreateTrayIcon()
         {
             try
             {
                 _trayIcon = new Hardcodet.Wpf.TaskbarNotification.TaskbarIcon();
 
-                // Cargar icono: si no existe el archivo, usar uno por defecto del sistema
+                // Cargar icono desde recurso incrustado
                 try
                 {
-                    _trayIcon.Icon = new System.Drawing.Icon("icon.ico");
+                    using var stream = Assembly.GetExecutingAssembly()
+                        .GetManifestResourceStream("SmartFocus.UI.appIcon.ico");
+                    if (stream != null)
+                        _trayIcon.Icon = new System.Drawing.Icon(stream);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // Fallback: icono por defecto de la aplicación (o generado)
-                    _trayIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName ?? "");
+                    System.Diagnostics.Debug.WriteLine($"Error loading tray icon: {ex.Message}");
+                    var fileName = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName;
+                    if (!string.IsNullOrEmpty(fileName))
+                        _trayIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(fileName);
                 }
 
                 _trayIcon.ToolTipText = "SmartFocus";

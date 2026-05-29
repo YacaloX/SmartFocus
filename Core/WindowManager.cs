@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
+using SmartFocus.Core.Interfaces;
 using SmartFocus.Models;
 using Vanara.PInvoke;
 
 namespace SmartFocus.Core
 {
-    public class WindowManager
+    public class WindowManager : IWindowManager
     {
         private const int SW_RESTORE = 9;
         private const int SW_SHOW = 5;
-        private const int WM_ACTIVATE = 0x0006;
-        private const int WA_ACTIVE = 1;
+        private const int SW_SHOWMINIMIZED = 2;
+        private const uint ASFW_ANY = uint.MaxValue;
 
         [DllImport("user32.dll")]
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
@@ -23,16 +24,7 @@ namespace SmartFocus.Core
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
-        private static extern void SwitchToThisWindow(IntPtr hWnd, bool fAltTab);
-
-        [DllImport("user32.dll")]
         private static extern bool AllowSetForegroundWindow(uint dwProcessId);
-
-        [DllImport("user32.dll")]
-        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll")]
         private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
@@ -41,80 +33,19 @@ namespace SmartFocus.Core
         private static extern bool BringWindowToTop(IntPtr hWnd);
 
         [DllImport("user32.dll")]
-        private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+        private static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll")]
-        private static extern bool SetCursorPos(int x, int y);
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr lpdwProcessId);
 
         [DllImport("user32.dll")]
-        private static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, UIntPtr dwExtraInfo);
+        private static extern bool IsWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
-        private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+        private static extern bool IsIconic(IntPtr hWnd);
 
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-
-        static string GetWindowTextRaw(IntPtr hWnd)
-        {
-            StringBuilder sb = new StringBuilder(256);
-            GetWindowText(hWnd, sb, sb.Capacity);
-            return sb.ToString();
-        }
-
-        private const uint MOUSEEVENTF_LEFTDOWN = 0x0002;
-        private const uint MOUSEEVENTF_LEFTUP = 0x0004;
-        private const byte VK_MENU = 0x12;
-        private const byte VK_TAB = 0x09;
-        private const uint KEYEVENTF_EXTENDEDKEY = 0x0001;
-        private const uint KEYEVENTF_KEYUP = 0x0002;
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct RECT
-        {
-            public int Left, Top, Right, Bottom;
-        }
-
-        public void FocusWindow(IntPtr hwnd)
-        {
-            hwnd = User32.GetAncestor(
-                (HWND)hwnd,
-                User32.GetAncestorFlag.GA_ROOT)
-                .DangerousGetHandle();
-
-            var target = (HWND)hwnd;
-
-            Console.WriteLine($"HWND TARGET = {hwnd}");
-            Console.WriteLine($"TITLE = {GetWindowTextRaw(hwnd)}");
-
-            User32.ShowWindow(target, ShowWindowCommand.SW_RESTORE);
-
-            var foreground = User32.GetForegroundWindow();
-
-            uint foreThread =
-                User32.GetWindowThreadProcessId(foreground, out _);
-
-            uint appThread =
-                Kernel32.GetCurrentThreadId();
-
-            User32.AttachThreadInput(
-                appThread,
-                foreThread,
-                true);
-
-            User32.BringWindowToTop(target);
-
-            User32.SetForegroundWindow(target);
-
-            User32.SetFocus(target);
-
-            User32.SetActiveWindow(target);
-
-            User32.AttachThreadInput(
-                appThread,
-                foreThread,
-                false);
-        }
+        [DllImport("kernel32.dll")]
+        private static extern uint GetCurrentThreadId();
 
         public List<WindowInfo> GetAllWindows()
         {
@@ -134,14 +65,69 @@ namespace SmartFocus.Core
                         using (var proc = Process.GetProcessById((int)pid))
                             processName = proc.ProcessName;
                     }
-                    catch { }
+                    catch (ArgumentException) { }
 
-                    IntPtr handlePtr = hwnd.DangerousGetHandle();
-                    windows.Add(new WindowInfo(handlePtr, title, pid, processName));
+                    windows.Add(new WindowInfo(hwnd.DangerousGetHandle(), title, pid, processName));
                 }
                 return true;
             }, IntPtr.Zero);
             return windows;
+        }
+
+        public async Task FocusWindowAsync(IntPtr hwndPtr)
+        {
+            try
+            {
+                if (!IsWindow(hwndPtr))
+                    return;
+
+                if (IsIconic(hwndPtr))
+                    ShowWindow(hwndPtr, SW_RESTORE);
+                else
+                    ShowWindow(hwndPtr, SW_SHOW);
+
+                await Task.Delay(50);
+
+                uint currentThreadId = GetCurrentThreadId();
+
+                AllowSetForegroundWindow(ASFW_ANY);
+                bool focused = SetForegroundWindow(hwndPtr);
+
+                if (!focused || GetForegroundWindow() != hwndPtr)
+                {
+                    IntPtr foreground = GetForegroundWindow();
+                    if (foreground != IntPtr.Zero)
+                    {
+                        uint foreThread = GetWindowThreadProcessId(foreground, IntPtr.Zero);
+                        if (foreThread != 0 && foreThread != currentThreadId)
+                        {
+                            AttachThreadInput(foreThread, currentThreadId, true);
+                            SetForegroundWindow(hwndPtr);
+                            BringWindowToTop(hwndPtr);
+                            await Task.Delay(20);
+                            AttachThreadInput(foreThread, currentThreadId, false);
+                        }
+                    }
+                }
+
+                if (GetForegroundWindow() != hwndPtr)
+                {
+                    ShowWindow(hwndPtr, SW_SHOWMINIMIZED);
+                    await Task.Delay(30);
+                    ShowWindow(hwndPtr, SW_RESTORE);
+                    AllowSetForegroundWindow(ASFW_ANY);
+                    SetForegroundWindow(hwndPtr);
+                }
+
+                if (GetForegroundWindow() != hwndPtr)
+                {
+                    Debug.WriteLine($"FocusWindow: All 3 levels failed for handle {hwndPtr}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"FocusWindow error: {ex.Message}");
+            }
         }
     }
 }

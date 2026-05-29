@@ -8,7 +8,7 @@
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         Topmost="True" ShowInTaskbar="False" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        KeyDown="Window_KeyDown">
+        PreviewKeyDown="Window_PreviewKeyDown">
     <Window.Resources>
         <SolidColorBrush x:Key="NeonCyan" Color="#00FFFF"/>
         <SolidColorBrush x:Key="BgDark" Color="#0D1117"/>

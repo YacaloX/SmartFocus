@@ -7,12 +7,21 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <UseWPF>true</UseWPF>
-    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>UI\appIcon.ico</ApplicationIcon>
+    <AssemblyTitle>SmartFocus</AssemblyTitle>
+    <Description>Ultralight window switcher for Windows</Description>
+    <Product>SmartFocus</Product>
+    <Version>1.0.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.0" />
     <PackageReference Include="Vanara.PInvoke.User32" Version="5.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="UI\appIcon.ico" />
   </ItemGroup>
 
 </Project>
